@@ -1,0 +1,26 @@
+#!/usr/bin/env node
+
+const semver = require('semver');
+const exec = require('child_process').execSync;
+
+const buildNumber = Number(process.env.TRAVIS_BUILD_NUMBER);
+if (!buildNumber) {
+  console.error('Failed to get a build number');
+  process.exit(1);
+}
+
+const proj = require('./package.json');
+console.log('Project is', proj.name, proj.version);
+
+console.log('Constructed', `${proj.version}-build.${buildNumber}`);
+
+const versionToPublish = semver.clean(`${proj.version}-build.${buildNumber}`);
+if (!versionToPublish) {
+  console.error('Failed to construct a new version');
+  process.exit(1);
+}
+
+console.log('Result is', versionToPublish);
+// exec(`npm version ${versionToPublish}`);
+
+
