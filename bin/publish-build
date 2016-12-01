@@ -9,7 +9,7 @@ if (!buildNumber) {
   process.exit(1);
 }
 
-const proj = require('./package.json');
+const proj = require(process.cwd() + '/package.json');
 console.log('Project is', proj.name, proj.version);
 
 console.log('Constructed', `${proj.version}-build.${buildNumber}`);
