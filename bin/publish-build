@@ -21,6 +21,6 @@ if (!versionToPublish) {
 }
 
 console.log('Publishing as version', versionToPublish);
-exec(`npm version ${versionToPublish}`);
+exec(`npm version ${versionToPublish} --no-git-tag-version`);
 
 
