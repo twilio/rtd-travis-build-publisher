@@ -20,7 +20,7 @@ if (!versionToPublish) {
   process.exit(1);
 }
 
-console.log('Result is', versionToPublish);
-// exec(`npm version ${versionToPublish}`);
+console.log('Publishing as version', versionToPublish);
+exec(`npm version ${versionToPublish}`);
 
 
