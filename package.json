@@ -1,9 +1,12 @@
 {
   "name": "travis-build-publisher",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Generates an unique version string to publish a build result" ,
   "author": "Sergei Chertkov",
   "license": "ISC",
+  "bin": {
+    "publish-build": "./bin/publish-build"
+  },
   "dependencies": {
     "semver": "^5.3.0"
   }
