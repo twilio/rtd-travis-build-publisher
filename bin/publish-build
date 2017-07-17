@@ -12,9 +12,15 @@ if (!buildNumber) {
 const proj = require(process.cwd() + '/package.json');
 console.log('Project is', proj.name, proj.version);
 
-console.log('Constructed', `${proj.version}-build.${buildNumber}`);
+const version = proj.version.replace('-dev', '');
 
-const versionToPublish = semver.clean(`${proj.version}-build.${buildNumber}`);
+const branchName = new String(exec('git rev-parse --abbrev-ref HEAD')).trim();
+console.log(`Branch name is: ${branchName}`);
+
+const buildName = `${version}-${branchName}.${buildNumber}`;
+console.log('Constructed: ', buildName);
+
+const versionToPublish = semver.clean(buildName);
 if (!versionToPublish) {
   console.error('Failed to construct a new version');
   process.exit(1);
