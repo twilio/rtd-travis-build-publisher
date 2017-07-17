@@ -1,6 +1,6 @@
 {
   "name": "travis-build-publisher",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Generates an unique version string to publish a build result" ,
   "author": "Sergei Chertkov",
   "license": "ISC",
