@@ -12,16 +12,14 @@ if (!buildNumber) {
 const proj = require(process.cwd() + '/package.json');
 console.log('Project is', proj.name, proj.version);
 
-const version = proj.version.replace('-dev', '');
+const version = proj.version.replace(/-.*/, '');
+console.log('Stripped version', version);
 
-let branchName = String(process.env.TRAVIS_PULL_REQUEST_BRANCH);
-if (branchName.length == 0) {
-    branchName = String(process.env.TRAVIS_BRANCH);
-}
+let branchName = String(exec('git rev-parse --abbrev-ref HEAD')).trim();
 console.log(`Branch name is: ${branchName}`);
 
 const buildName = `${version}-${branchName}.${buildNumber}`;
-console.log('Constructed: ', buildName);
+console.log('Constructed version: ', buildName);
 
 const versionToPublish = semver.clean(buildName);
 if (!versionToPublish) {
@@ -30,6 +28,6 @@ if (!versionToPublish) {
 }
 
 console.log('Publishing as version', versionToPublish);
-exec(`npm version ${versionToPublish} --no-git-tag-version`);
+exec(`npm version ${versionToPublish} --no-git-tag-version --allow-same-version`);
 
 
