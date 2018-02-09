@@ -3,20 +3,30 @@
 const semver = require('semver');
 const exec = require('child_process').execSync;
 
-const buildNumber = Number(process.env.TRAVIS_BUILD_NUMBER);
-if (!buildNumber) {
-  console.error('Failed to get a build number');
-  process.exit(1);
+function createBuildNumber() {
+    const travisTag = String(process.env.TRAVIS_TAG);
+    if (travisTag.startsWith('release-')) {
+        // If tag start from release, just get a version from tag
+        return travisTag.remove('release-');
+    }
+
+    const buildNumber = Number(process.env.TRAVIS_BUILD_NUMBER);
+    if (!buildNumber) {
+      console.error('Failed to get a build number: are we on Travis?');
+      process.exit(1);
+    }
+
+    const proj = require(process.cwd() + '/package.json');
+    console.log('Project is', proj.name, proj.version);
+
+    const version = proj.version.replace(/-.*/, '');
+    console.log('Stripped version', version);
+
+    let branchName = String(exec('git rev-parse --abbrev-ref HEAD')).trim();
+    console.log(`Branch name is: ${branchName}`);
+
+    return `${version}-${branchName}.${buildNumber}`;
 }
-
-const proj = require(process.cwd() + '/package.json');
-console.log('Project is', proj.name, proj.version);
-
-const version = proj.version.replace(/-.*/, '');
-console.log('Stripped version', version);
-
-let branchName = String(exec('git rev-parse --abbrev-ref HEAD')).trim();
-console.log(`Branch name is: ${branchName}`);
 
 const buildName = `${version}-${branchName}.${buildNumber}`;
 console.log('Constructed version: ', buildName);
