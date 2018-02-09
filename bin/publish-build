@@ -7,7 +7,7 @@ function createBuildNumber() {
     const travisTag = String(process.env.TRAVIS_TAG);
     if (travisTag.startsWith('release-')) {
         // If tag start from release, just get a version from tag
-        return travisTag.remove('release-');
+        return travisTag.replace('release-', '');
     }
 
     const buildNumber = Number(process.env.TRAVIS_BUILD_NUMBER);
@@ -28,7 +28,7 @@ function createBuildNumber() {
     return `${version}-${branchName}.${buildNumber}`;
 }
 
-const buildName = `${version}-${branchName}.${buildNumber}`;
+const buildName = createBuildNumber();
 console.log('Constructed version: ', buildName);
 
 const versionToPublish = semver.clean(buildName);
@@ -37,7 +37,7 @@ if (!versionToPublish) {
   process.exit(1);
 }
 
-console.log('Publishing as version', versionToPublish);
+console.log('Set package version to', versionToPublish);
 exec(`npm version ${versionToPublish} --no-git-tag-version --allow-same-version`);
 
 
