@@ -5,7 +5,9 @@
   "author": "Sergei Chertkov",
   "license": "BEER-WARE",
   "bin": {
-    "publish-build": "./bin/publish-build"
+    "publish-build": "./bin/publish-build",
+    "prepare-publish-version": "./bin/prepare-publish-version",
+    "get-channel-name": "./bin/get-channel-name"
   },
   "dependencies": {
     "semver": "^5.5.0"

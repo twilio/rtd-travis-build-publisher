@@ -40,4 +40,3 @@ if (!versionToPublish) {
 console.log('Set package version to', versionToPublish);
 exec(`npm version ${versionToPublish} --no-git-tag-version --allow-same-version`);
 
-
