@@ -3,7 +3,7 @@
 const semver = require('semver');
 const exec = require('child_process').execSync;
 
-console.warning("this script is already deprecated, please consider moving to the new one");
+console.warn("this script is already deprecated, please consider moving to the new one");
 
 const buildNumber = Number(process.env.TRAVIS_BUILD_NUMBER);
 if (!buildNumber) {
