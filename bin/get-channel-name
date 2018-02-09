@@ -12,7 +12,14 @@ function getChannelName() {
         return 'latest';
     }
 
-    return String(exec('git rev-parse --abbrev-ref HEAD')).trim();
+    let branchName = String(process.env.TRAVIS_PULL_REQUEST_BRANCH);
+    if (branchName.length == 0) {
+        branchName = String(process.env.TRAVIS_BRANCH);
+    }
+    return branchName;
+
+    // Git version doesn't work because travis always has HEAD
+    //return String(exec('git rev-parse --abbrev-ref HEAD')).trim();
 }
 
 console.log(getChannelName());

@@ -22,7 +22,13 @@ function createBuildNumber() {
     const version = proj.version.replace(/-.*/, '');
     console.log('Stripped version', version);
 
-    let branchName = String(exec('git rev-parse --abbrev-ref HEAD')).trim();
+    let branchName = String(process.env.TRAVIS_PULL_REQUEST_BRANCH);
+    if (branchName.length == 0) {
+        branchName = String(process.env.TRAVIS_BRANCH);
+    }
+
+    // Git version doesn't work because travis always has HEAD
+    // let branchName = String(exec('git rev-parse --abbrev-ref HEAD')).trim();
     console.log(`Branch name is: ${branchName}`);
 
     return `${version}-${branchName}.${buildNumber}`;
