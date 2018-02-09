@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+
+const semver = require('semver');
+const exec = require('child_process').execSync;
+
+function createBuildNumber() {
+    const travisTag = String(process.env.TRAVIS_TAG);
+    if (travisTag.startsWith('release-')) {
+        // If tag start from release, just get a version from tag
+        return travisTag.replace('release-', '');
+    }
+
+    const buildNumber = Number(process.env.TRAVIS_BUILD_NUMBER);
+    if (!buildNumber) {
+      console.error('Failed to get a build number: are we on Travis?');
+      process.exit(1);
+    }
+
+    const proj = require(process.cwd() + '/package.json');
+    console.log('Project is', proj.name, proj.version);
+
+    const version = proj.version.replace(/-.*/, '');
+    console.log('Stripped version', version);
+
+    let branchName = String(exec('git rev-parse --abbrev-ref HEAD')).trim();
+    console.log(`Branch name is: ${branchName}`);
+
+    return `${version}-${branchName}.${buildNumber}`;
+}
+
+const buildName = createBuildNumber();
+console.log('Constructed version: ', buildName);
+
+const versionToPublish = semver.clean(buildName);
+if (!versionToPublish) {
+  console.error('Failed to construct a new version');
+  process.exit(1);
+}
+
+console.log('Set package version to', versionToPublish);
+exec(`npm version ${versionToPublish} --no-git-tag-version --allow-same-version`);
+
+
