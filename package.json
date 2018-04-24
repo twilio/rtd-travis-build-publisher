@@ -1,12 +1,13 @@
 {
   "name": "travis-build-publisher",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Generates an unique version string to publish a build result" ,
   "author": "Sergei Chertkov",
   "license": "BEER-WARE",
   "bin": {
     "publish-build": "./bin/publish-build",
     "prepare-publish-version": "./bin/prepare-publish-version",
+    "strip-private-prefix": "./bin/strip-private-prefix",
     "get-channel-name": "./bin/get-channel-name"
   },
   "dependencies": {
