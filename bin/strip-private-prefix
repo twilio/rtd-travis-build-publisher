@@ -1,0 +1,17 @@
+#!/bin/sh
+set -e
+
+if [ $# -eq 0 ]; then
+    echo "No arguments provided"
+    exit 1
+fi
+
+export PREFIX=$(echo $1 | perl -p -e "s/@/\\\@/g")
+
+echo "Stripping private repo prefix from package.json and source files: $PREFIX"
+
+find ./test -name "*.ts" -exec perl -pi -e "s/(import.*)$PREFIX\/(.*)/\$1\$2/" {} \;
+find ./src -name "*.ts" -exec perl -pi -e "s/(import.*)$PREFIX\/(.*)/\$1\$2/" {} \;
+perl -pi -e "s/(.*)$PREFIX\/(.*)/\$1\$2/" package.json
+
+echo "done";
