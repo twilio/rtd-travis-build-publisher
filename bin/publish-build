@@ -20,6 +20,7 @@ let branchName = String(process.env.TRAVIS_PULL_REQUEST_BRANCH);
 if (branchName.length == 0) {
     branchName = String(process.env.TRAVIS_BRANCH);
 }
+branchName = branchName.replace(/\//g, '-');
 console.log(`Branch name is: ${branchName}`);
 
 const buildName = `${version}-${branchName}.${buildNumber}`;
