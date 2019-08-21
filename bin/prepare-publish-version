@@ -26,6 +26,7 @@ function createBuildNumber() {
     if (branchName.length == 0) {
         branchName = String(process.env.TRAVIS_BRANCH);
     }
+    branchName = branchName.replace(/\//g, '-');
 
     // Git version doesn't work because travis always has HEAD
     // let branchName = String(exec('git rev-parse --abbrev-ref HEAD')).trim();

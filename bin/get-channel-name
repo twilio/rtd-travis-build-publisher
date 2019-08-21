@@ -16,6 +16,7 @@ function getChannelName() {
     if (branchName.length == 0) {
         branchName = String(process.env.TRAVIS_BRANCH);
     }
+    branchName = branchName.replace(/\//g, '-');
     return branchName;
 
     // Git version doesn't work because travis always has HEAD
