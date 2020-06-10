@@ -1,6 +1,6 @@
 {
   "name": "travis-build-publisher",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Generates an unique version string to publish a build result",
   "author": "Sergei Chertkov",
   "license": "BEER-WARE",
