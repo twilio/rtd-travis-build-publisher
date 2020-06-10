@@ -1,23 +1,48 @@
 #!/bin/sh
 set -e
 
-if [ $# -eq 0 ]; then
-    echo "No arguments provided"
-    exit 1
-fi
+unset IS_CONVO
+unset PREFIX
 
-export PREFIX=$(echo $1 | perl -p -e "s/@/\\\@/g")
+for arg in "$@"; do
+  case $arg in
+    --conversations)
+      export IS_CONVO=true
+      ;;
+    -*)
+      echo "Invalid flag $arg was provided"
+      exit 1
+      ;;
+    *)
+      if [ -z ${PREFIX+x} ]; then
+        export PREFIX=$(echo $arg | perl -p -e "s/@/\\\@/g")
+      else
+        echo "Invalid argument $arg was provided"
+        exit 1
+      fi
+      ;;
+  esac
+done
+
+if [ -z ${PREFIX+x} ]; then
+  echo "No prefix provided"
+  exit 1
+fi
 
 echo "Stripping private repo prefix from package.json and source files: $PREFIX"
 
 if [ -d "test" ]; then
-    find ./test -name "*.ts" -exec perl -pi -e "s/(import.*)$PREFIX\/(.*)/\$1\$2/" {} \;
+  find ./test -name "*.ts" -exec perl -pi -e "s/(import.*)$PREFIX\/(.*)/\$1\$2/" {} \;
 fi
 
 if [ -d "src" ]; then
-    find ./src -name "*.ts" -exec perl -pi -e "s/(import.*)$PREFIX\/(.*)/\$1\$2/" {} \;
+  find ./src -name "*.ts" -exec perl -pi -e "s/(import.*)$PREFIX\/(.*)/\$1\$2/" {} \;
 fi
 
 perl -pi -e "s/(.*)$PREFIX\/(.*)/\$1\$2/" package.json
 
-echo "done";
+if [ $IS_CONVO ]; then
+  perl -pi -e "s/(.*\"name\": \").*(\".*)/\$1$PREFIX\/conversations\$2/" package.json
+fi
+
+echo "Done";
